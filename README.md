@@ -16,7 +16,7 @@ GNU/GPL v3 (voir LICENSE)
 
 CS50x's final project. It's coded in C and exported in js/wasm with emscriptem. All the interactions are coded as force vectors applied to the balls. It's inspired by the Nature of Code, excellent Javascript Edutainment on Daniel Shiffman's Coding Train channel.
 
-![Aperçu](res/demo.png)
+![Aperçu](res/img_itch.png)
 
 #### Credits
 
@@ -41,7 +41,7 @@ CS50x's final project. It's coded in C and exported in js/wasm with emscriptem. 
 * main.c - main game loop prepared for alternative compilation by gcc or emcc
 * jeu.* - in game mechanics
 * vecteur.* - vectors' maths
-* physique.* - Newtonian pĥysic, forces -> acceleration -> speed -> position
+* physique.* - Newtonian physic, forces -> acceleration -> speed -> position
 * affichage.* - display controled using SDL
 * musique.* - sounds controled using SDL Mixer
 * controle.* - player inputs
@@ -59,7 +59,7 @@ GNU/Linux running file
 gcc *.c -Wall -o balls_in_the_wind -lm $(sdl2-config --cflags --libs) -lSDL2_gfx -lSDL2_ttf -lSDL2_mixer
 ```
 
-wasm and companion files running in a web browser
+Web Assembly compilation and companion files running in a web browser
 
 ```
 emcc *c -O2 -s USE_SDL=2 -s USE_SDL_TTF=2 --preload-file res/ -s USE_SDL_GFX=2 -s USE_SDL_MIXER=2 -s ALLOW_MEMORY_GROWTH -o balls_in_the_wind.html
