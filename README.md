@@ -8,7 +8,7 @@ GNU/GPL v3 (voir LICENSE)
 
 [https://youtu.be/5_iF-iuUEvs](https://youtu.be/5_iF-iuUEvs)
 
-#### Play onlyne:
+#### Play online:
 
 [https://seb46.itch.io/balls-in-the-wind](https://seb46.itch.io/balls-in-the-wind)
 
@@ -47,7 +47,7 @@ CS50x's final project. It's coded in C and exported in js/wasm with emscriptem. 
 * main.c - main game loop prepared for alternative compilation by gcc or emcc
 * jeu.* - in game mechanics
 * vecteur.* - vectors' maths
-* physique.* - Newtonian physic, forces -> acceleration -> speed -> position
+* physique.* - Newtonian physics, forces -> acceleration -> speed -> position
 * affichage.* - display controled using SDL
 * musique.* - sounds controled using SDL Mixer
 * controle.* - player inputs
