@@ -4,9 +4,13 @@ by Sébastien Abilla
 
 GNU/GPL v3 (voir LICENSE)
 
-[Source code](https://github.com/sebabilla/balls_in_the_wind)
+#### Video Demo:  
 
-#### Video Demo:  <URL HERE>
+[https://youtu.be/5_iF-iuUEvs](https://youtu.be/5_iF-iuUEvs)
+
+#### Play onlyne:
+
+[https://seb46.itch.io/balls-in-the-wind](https://seb46.itch.io/balls-in-the-wind)
 
 #### Description:
 
@@ -15,6 +19,8 @@ GNU/GPL v3 (voir LICENSE)
 * I've never managed to go till the 6 balls' stage by playing fairly. Will you manage to reach this last stage and clear it? :)​
 
 CS50x's final project. It's coded in C and exported in js/wasm with emscriptem. All the interactions are coded as force vectors applied to the balls. It's inspired by the Nature of Code, excellent Javascript Edutainment on Daniel Shiffman's Coding Train channel.
+
+[Source code](https://github.com/sebabilla/balls_in_the_wind)
 
 ![Aperçu](res/img_itch.png)
 
