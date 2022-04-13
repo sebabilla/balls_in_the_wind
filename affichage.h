@@ -37,6 +37,7 @@ typedef struct Textes
 void SDL_ExitWithError(const char *message);
 void limit_fps(void);
 void InitialisationAffichage(void);
+void ChargerImage(char *l, int i);
 void AfficherLeRendu(void);
 void DestructionAffichage(void);
 

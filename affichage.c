@@ -12,7 +12,7 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 int frame_limit;
 TTF_Font *font;
-SDL_Texture *texture_illustration;
+SDL_Texture *texture_illustration[9];
 SDL_Texture *textures_niveaux[5];
 SDL_Texture *textures_langages[NOMBRE_LANGAGES * 2];
 int longueur_langage[NOMBRE_LANGAGES * 2];
@@ -69,13 +69,15 @@ void InitialisationAffichage(void)
 	if (!font)
 		SDL_ExitWithError("Chargement de la police");
 		
-	SDL_Surface *image = NULL;
-	texture_illustration = NULL;	
-	if ((image = SDL_LoadBMP("res/ballons_vent.bmp")) == NULL)
-		SDL_ExitWithError("Impossible de charger l'image");
-	if ((texture_illustration = SDL_CreateTextureFromSurface(renderer, image)) == NULL)
-		SDL_ExitWithError("Impossible de charger l'image");
-	SDL_FreeSurface(image);
+	ChargerImage("res/rouge.bmp", 0);
+	ChargerImage("res/vert.bmp", 1);
+	ChargerImage("res/bleu.bmp", 2);
+	ChargerImage("res/jaune.bmp", 3);
+	ChargerImage("res/rose.bmp", 4);
+	ChargerImage("res/marron.bmp", 5);
+	ChargerImage("res/turquoise.bmp", 6);
+	ChargerImage("res/blanc.bmp", 7);
+	ChargerImage("res/ballons_vent.bmp", 8);
 		
 	couleurs[0] = ROUGE;
 	couleurs[1] = VERT;
@@ -83,6 +85,17 @@ void InitialisationAffichage(void)
 	couleurs[3]	= JAUNE;
 	couleurs[4]	= ROSE;
 	couleurs[5]	= MARRON;		
+}
+
+void ChargerImage(char *l, int i)
+{
+	SDL_Surface *image = NULL;
+	texture_illustration[i] = NULL;	
+	if ((image = SDL_LoadBMP(l)) == NULL)
+		SDL_ExitWithError("Impossible de charger l'image");
+	if ((texture_illustration[i] = SDL_CreateTextureFromSurface(renderer, image)) == NULL)
+		SDL_ExitWithError("Impossible de charger l'image");
+	SDL_FreeSurface(image);
 }
 
 void AfficherLeRendu(void)
@@ -105,6 +118,15 @@ void AfficherLeRendu(void)
 
 void DestructionAffichage(void)
 {
+	for (int i = 0; i < 9; i++)
+		SDL_DestroyTexture(texture_illustration[i]);
+	for (int i = 0; i < LIGNES_TEXTE; i++)
+		SDL_DestroyTexture(texture_textes[i]);
+	for (int i = 0; i < 5; i++)
+		SDL_DestroyTexture(textures_niveaux[i]);
+	for (int i = 0; i < NOMBRE_LANGAGES * 2; i++)
+		SDL_DestroyTexture(textures_langages[i]);
+		
 	TTF_CloseFont(font);
 	TTF_Quit();
 	SDL_DestroyRenderer(renderer);
@@ -114,19 +136,19 @@ void DestructionAffichage(void)
 
 void InitialiserParticules(void)
 {
-	for (int i = 0; i < LARGEUR_FENETRE / 20; i++)
-		for (int j = 0; j < HAUTEUR_FENETRE / 20; j++)
+	for (int i = 0; i < LARGEUR_FENETRE / 40; i++)
+		for (int j = 0; j < HAUTEUR_FENETRE / 40; j++)
 		{
-			particules[i][j].x = i * 20 + rand() % 15;
-			particules[i][j].y = 10 + j * 20 + rand() % 15;
+			particules[i][j].x = i * 40 + rand() % 35;
+			particules[i][j].y = 10 + j * 40 + rand() % 35;
 		}
 	sinusvent = 0;
 }
 
 void AfficherVent(Corps c)
 {
-	for (int i = 0; i < LARGEUR_FENETRE / 20; i++)
-		for (int j = 0; j < HAUTEUR_FENETRE / 20; j++)
+	for (int i = 0; i < LARGEUR_FENETRE / 40; i++)
+		for (int j = 0; j < HAUTEUR_FENETRE / 40; j++)
 		{
 			particules[i][j].x += c.vent.x * c.rayon * 10; 
 			if (particules[i][j].x < 0)
@@ -139,28 +161,43 @@ void AfficherVent(Corps c)
 	if (c.vent.x != 0)
 		sinusvent += 0.05 ;
 		
-	{
-		for (int i = 0; i < LARGEUR_FENETRE / 20; i++)
-			for (int j = 0; j < HAUTEUR_FENETRE / 20; j++)
-			{
-				if (pixelColor(renderer, particules[i][j].x, particules[i][j].y + houle, TURQUOISE) != 0)
-				SDL_ExitWithError("Impossible d'afficher le vent");
-			}
-	}	
+	SDL_Rect rect_illu = {.w = 2, .h = 2};	
+	for (int i = 0; i < LARGEUR_FENETRE / 40; i++)
+		for (int j = 0; j < HAUTEUR_FENETRE / 40; j++)
+		{				
+			rect_illu.x = particules[i][j].x; 
+			rect_illu.y = particules[i][j].y + houle;
+			if (SDL_RenderCopy(renderer, texture_illustration[6], NULL, &rect_illu) != 0)
+				SDL_ExitWithError("Impossible d'afficher la texture");
+		}	
 }
 
 void AfficherChallenge(Partie *partie)
 {
+	SDL_Rect rect_illu = {.w = 40, .h = 40};	
+						
 	for (int i = 0; i < partie->nombre_boules; i++)
-		if (filledCircleColor(renderer, 80 + 40 * i, 35, 20, couleurs[partie->tirage[i]]) != 0) 
-			SDL_ExitWithError("Impossible de dessiner un cercle");
+	{
+		rect_illu.x = 60 + 40 * i; 
+		rect_illu.y = 15;
+		if (SDL_RenderCopy(renderer, texture_illustration[partie->tirage[i]], NULL, &rect_illu) != 0)
+			SDL_ExitWithError("Impossible d'afficher la texture");
+	}
 }
 
 void AfficherCorps(Corps *boules, Partie *partie)
 {
+	SDL_Rect rect_illu;
+	
 	for (int i = 0; i < partie->nombre_boules; i++)
-		if (filledCircleColor(renderer, boules[i].position.x, boules[i].position.y, boules[i].rayon, couleurs[i]) != 0) 
-			SDL_ExitWithError("Impossible de dessiner un cercle");
+	{		
+		rect_illu.x = boules[i].position.x - boules[i].rayon; 
+		rect_illu.y = boules[i].position.y - boules[i].rayon;
+		rect_illu.w = boules[i].rayon * 2;
+		rect_illu.h = boules[i].rayon * 2;
+		if (SDL_RenderCopy(renderer, texture_illustration[i], NULL, &rect_illu) != 0)
+			SDL_ExitWithError("Impossible d'afficher la texture");
+	}
 }
 
 void ChargerTextes(int l)
@@ -360,7 +397,7 @@ void AfficherIllustration (void)
 	SDL_Rect rect_illu = {.w = 200, .h = 280};
 	rect_illu.x = LARGEUR_FENETRE / 2 - 100; 
 	rect_illu.y = HAUTEUR_FENETRE / 2 - 300;
-	if (SDL_RenderCopy(renderer, texture_illustration, NULL, &rect_illu) != 0)
+	if (SDL_RenderCopy(renderer, texture_illustration[8], NULL, &rect_illu) != 0)
 			SDL_ExitWithError("Impossible d'afficher la texture");
 			
 	hlineColor(renderer, LARGEUR_FENETRE / 2 - 200, LARGEUR_FENETRE / 2 + 200, HAUTEUR_FENETRE / 2 + 20, BLANC);
